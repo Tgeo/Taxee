@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Taxee in JavaScript</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="models/php.js"></script>
+        <script src="models/taxcalculator.js"></script>
+    </head>
+    <style>
+        div {
+            margin: 1em;
+        }
+    </style>
+    <body>
+        <div>
+            <form id="calcForm">
+                <div>
+                    <label for="year">Year:</label>
+                    <select id="year" name="year">
+                        <option value="2014" selected>2014</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="payRate">Pay rate:</label>
+                    <input id="payRate" name="payRate" type="number" step="1" value="50000" />
+                </div>
+                <div>
+                    <label for="payPeriods"># of Pay Periods Per Year:</label>
+                    <input id="payPeriods" name="payPeriods" type="number" min="1" max="52" step="1" value="1" />
+                </div>
+                <div>
+                    <label for="filingStatus">Tax Filing Status:</label>
+                    <select id="filingStatus" name="filingStatus">
+                        <option value="single" selected>Single</option>
+                        <option value="married">Married</option>
+                        <option value="married_separately">Married Filing Separately</option>
+                        <option value="head_of_household">Head of Household</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="state">State:</label>
+                    <select id="state" name="state">
+                        <option value="CA" selected>California</option>
+                        <option value="NV">Nevada</option>
+                        <option value="WA">Washington</option>
+                        <option value="NY">New York</option>
+                        <option value="" disabled>... etc</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="submit" value="Calculate" />
+                </div>
+            </form>
+            <div>
+                <p id="result">Calculated yearly tax: $0</p>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        'use strict';
+        
+        var taxCalculator = new taxCalculator();
+        
+        $('#calcForm').submit(function( event ) {
+            event.preventDefault(); //prevents form submit (and page refresh)        
+            var values = $(this).serializeArray();
+            var taxAmount = taxCalculator.calculateTaxes(
+                values[0].value, values[1].value, values[2].value,
+                values[3].value, values[4].value
+            );
+            $('#result').text('Calculated yearly tax: $' + taxAmount.toFixed(2));           
+        });
+    </script>
+</html>
